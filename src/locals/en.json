@@ -1,0 +1,56 @@
+{
+  "tool_name": "VizzTube",
+  "hero_title": "Uncover what makes videos go viral.",
+  "hero_subtitle": "Track trends, analyze comments, and predict growth. Discover viral sparks in just 3 seconds.",
+  "tool_description": "What is VizzTube?\nA YouTube-focused research tool that instantly reveals why videos are going viral. Comment analysis, trend extraction, and growth forecasting—all in one.",
+  "features": {
+    "title1": "Trending Video Search",
+    "desc1": "See exactly why a video is going viral.\nQuickly identify what’s trending.\nAutomatically extract hot videos based on categories and keywords. Check views, likes, comments, and more at a glance—greatly reducing research time.",
+    "title2": "AI-Powered Comment Analysis",
+    "desc2": "“The comment section is the best marketing data.”\nUnderstand viewers’ true thoughts with AI.\nAnalyze any video’s comments to visualize viewer demographics, emotions, and interests. Clearly see what your target audience reacts to.",
+    "title3": "Viral Video Radar",
+    "desc3": "“Spot future viral videos before they’re popular.”\nPredict the next viral hit.\nAutomatically extract attention-worthy videos that are gaining views rapidly based on metrics like views, post date, and subscriber count. Filter by view/subscriber ratio and more."
+  },
+  "pricing": {
+    "catchphrase": "Affordable pricing. Results that keep you going.",
+    "monthly_fee": "¥2,980",
+    "button_text": "Sign Up"
+  },
+  "after_login": {
+    "billing_info": "You can view your billing date on your dashboard."
+  },
+  "header": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "usage": "How to Use",
+    "tools": "Tools",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Login",
+    "signup": "Sign Up",
+    "account": "Account",
+    "dashboard": "Dashboard"
+  },
+   "footer": {
+    "linksTitle": "Links",
+    "home": "Home",
+    "contact": "Contact",
+    "howToUse": "How to Use",
+    "loginRegister": "Login / Register",
+    "legalTitle": "Legal",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "commercial": "Commercial Info",
+    "language": "Language",
+    "description": "VizzTube is a YouTube research tool that helps you understand video trends."
+  },
+  "registration": {
+    "title": "Start in just 10 seconds.",
+    "subtitle": "Create your account to begin."
+  },
+  "payment": {
+    "title": "We use a trusted third-party payment system. Pay with confidence.",
+    "success_message": "Your payment is complete.\nYou now have instant access to the tool."
+  }
+}

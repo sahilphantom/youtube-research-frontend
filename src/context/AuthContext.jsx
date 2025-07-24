@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await api.get('/auth/verify');
+      console.log(response.data)
       setUser(response.data);
       setLoading(false);
     } catch (err) {

@@ -39,15 +39,11 @@ export default function Register() {
 
     setIsLoading(true);
 
-    try {
-      const response = await api.post('/auth/register', {
-        email: formData.email,
-        password: formData.password
-      });
-      
-      const { token, user } = response.data;
-      await signup(token, user);
-      navigate('/', { replace: true });
+   try {
+  await signup({
+    email: formData.email,
+    password: formData.password
+  });
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred during registration');
       console.error('Registration error:', err);

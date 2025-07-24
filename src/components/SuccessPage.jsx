@@ -12,21 +12,23 @@ const SuccessPage = () => {
   const intervalRef = useRef(null);
   const retryCountRef = useRef(0);
   const MAX_RETRIES = 10;
+  const pollingRef = useRef(false); // 🔐 Prevent overlapping checks
 
   const clearCheckInterval = () => {
     if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+      clearTimeout(intervalRef.current);
       intervalRef.current = null;
     }
   };
 
   const checkStatus = useCallback(async (sessionId) => {
-    if (!sessionId || status !== 'loading') return false; // ✅ Only poll while loading
+    if (!sessionId || status !== 'loading' || pollingRef.current) return false;
 
+    pollingRef.current = true;
     try {
-      console.log('Checking payment status...');
+      console.log('🔁 Checking payment status...');
       const response = await api.get(`/stripe/session-status?sessionId=${sessionId}`);
-      console.log('Payment status response:', response.data);
+      console.log('✅ Payment status response:', response.data);
 
       if (response.data.paymentStatus === 'paid') {
         clearCheckInterval();
@@ -46,22 +48,20 @@ const SuccessPage = () => {
 
       return false;
     } catch (err) {
-      console.error('Payment verification error:', err);
+      console.error('❌ Payment verification error:', err);
 
-      if (err.response?.status === 500) {
-        retryCountRef.current += 1;
-        if (retryCountRef.current >= MAX_RETRIES) {
-          clearCheckInterval();
-          setStatus('error');
-          setError('Payment verification failed after multiple attempts. Please contact support.');
-        }
-        return false;
+      retryCountRef.current += 1;
+      if (retryCountRef.current >= MAX_RETRIES) {
+        clearCheckInterval();
+        setStatus('error');
+        setError('Payment verification failed after multiple attempts. Please contact support.');
+      } else {
+        setError(err.response?.data?.message || 'Failed to verify payment');
       }
 
-      clearCheckInterval();
-      setStatus('error');
-      setError(err.response?.data?.message || 'Failed to verify payment');
       return false;
+    } finally {
+      pollingRef.current = false;
     }
   }, [navigate, refreshUser, status]);
 
@@ -79,16 +79,19 @@ const SuccessPage = () => {
       login(token);
     }
 
-    checkStatus(sessionId).then(success => {
-      if (!success && !intervalRef.current) {
-        intervalRef.current = setInterval(() => {
-          checkStatus(sessionId);
-        }, 5000);
+    const poll = async () => {
+      const success = await checkStatus(sessionId);
+      if (!success && retryCountRef.current < MAX_RETRIES && status === 'loading') {
+        intervalRef.current = setTimeout(poll, 5000);
       }
-    });
+    };
 
-    return clearCheckInterval;
-  }, [searchParams, login, checkStatus]);
+    poll(); // 🔁 Start initial check
+
+    return () => {
+      clearCheckInterval(); // Cleanup
+    };
+  }, [searchParams, login, checkStatus, status]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

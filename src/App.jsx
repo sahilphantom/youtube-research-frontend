@@ -16,6 +16,8 @@ import NotFound from './components/NotFound'
 import Unauthorized from './components/Unauthorized'
 import PrivateRoute from './components/PrivateRoute'
 import { AuthProvider } from './context/AuthContext'
+import Footer from './components/Footer'
+import Feature from './components/Feature'
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/pricing" element={<Pricing />} />
+              <Route path="/feature" element={<Feature />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes - require authentication */}
@@ -77,6 +80,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
+        
+          <Footer />
       </div>
     </AuthProvider>
   )
