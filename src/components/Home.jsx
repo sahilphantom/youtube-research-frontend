@@ -4,6 +4,7 @@ import SubscriptionStatus from './SubscriptionStatus';
 import Hero from './Hero';
 import Pricing from './Pricing';
 import Feature from './Feature';
+import FAQ from './FAQ';
 
 export default function Home() {
   const { token, isSubscribed } = useAuth();
@@ -15,7 +16,8 @@ export default function Home() {
       {/* Features Section */}
       <Feature />
      
-     <Pricing />
+     
+     <FAQ />
 
 
       {/* Content Section */}

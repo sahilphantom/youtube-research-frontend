@@ -69,13 +69,13 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
         ease: "easeOut",
       }}
       className={cn(
-        "flex flex-col lg:border-r py-10 relative group/feature dark:border-neutral-800",
+        "flex flex-col lg:border-r text-start  py-10 relative group/feature dark:border-neutral-800",
         index === 0 && "lg:border-l dark:border-neutral-800",
         "lg:border-b dark:border-neutral-800",
       )}
     >
       <motion.div
-        className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none"
+        className="opacity-0 px-10 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-neutral-100 dark:from-neutral-800 to-transparent pointer-events-none"
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -104,12 +104,12 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
           animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
           transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
         >
-          {index + 1}. {title}
+           {title}
         </motion.span>
       </div>
 
       <motion.p
-        className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-4 relative z-10 px-10"
+        className="text-sm px-9 font-medium  text-indigo-600 dark:text-indigo-400 mb-4 relative z-10 "
         initial={{ x: -20, opacity: 0 }}
         animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
@@ -118,7 +118,7 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
       </motion.p>
 
       <motion.p
-        className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10 px-10 leading-relaxed"
+        className="text-sm px-10 text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10  leading-relaxed"
         initial={{ x: -20, opacity: 0 }}
         animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.6 }}

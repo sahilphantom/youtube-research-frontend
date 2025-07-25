@@ -18,6 +18,7 @@ import PrivateRoute from './components/PrivateRoute'
 import { AuthProvider } from './context/AuthContext'
 import Footer from './components/Footer'
 import Feature from './components/Feature'
+import FAQ from './components/FAQ'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/pricing" element={<Pricing />} />
               <Route path="/feature" element={<Feature />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes - require authentication */}
