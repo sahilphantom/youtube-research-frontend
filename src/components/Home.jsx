@@ -2,10 +2,10 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import SubscriptionStatus from './SubscriptionStatus';
 import Hero from './Hero';
-import Pricing from './Pricing';
 import Feature from './Feature';
 import FAQ from './FAQ';
 import HowToUse from './HowToUse';
+import Tools from './Tools';
 
 export default function Home() {
   const { token, isSubscribed } = useAuth();
@@ -17,6 +17,7 @@ export default function Home() {
       {/* Features Section */}
       <Feature />
       <HowToUse />
+      <Tools />
      
      
      <FAQ />
@@ -26,7 +27,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
         {token && <SubscriptionStatus />}
 
-        {!token && (
+        {/* {!token && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
             <h3 className="text-lg font-semibold text-blue-800 mb-2">
               Ready to unlock powerful insights?
@@ -35,7 +36,7 @@ export default function Home() {
               Please log in to access our comprehensive YouTube research tools.
             </p>
           </div>
-        )}
+        )} */}
 
         {token && !isSubscribed && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">

@@ -1,5 +1,3 @@
-"use client"
-
 import React, { useState, useEffect } from "react"
 import { motion, useAnimation, useInView } from "framer-motion"
 import { Play, TrendingUp, MessageSquare, Target, Zap, ArrowRight, Sparkles, Eye, BarChart3 } from "lucide-react"
@@ -73,7 +71,7 @@ const Hero = () => {
   ]
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-50">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
       {/* Enhanced Animated Background */}
       <div className="absolute inset-0">
        
@@ -135,7 +133,7 @@ const Hero = () => {
           whileHover={{ scale: 1.05, y: -2 }}
         >
           <Sparkles className="w-4 h-4 mr-2 text-purple-600" />
-          The Future of YouTube Analytics
+          YouTube分析の未来
           <ArrowRight className="w-4 h-4 ml-2" />
         </motion.div>
 
@@ -152,7 +150,7 @@ const Hero = () => {
               }}
               transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
             >
-              Videos that grow,
+              成長する動画を、
             </motion.span>
           </span>
           <motion.span
@@ -161,7 +159,7 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            laid bare.
+            丸裸にする。
           </motion.span>
         </motion.h1>
 
@@ -176,7 +174,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
           >
-            Trending check,
+            トレンドチェック、
           </motion.span>
           <motion.span
             className="inline-block mr-2 text-indigo-500"
@@ -184,7 +182,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.0, duration: 0.6 }}
           >
-            comment analysis,
+            コメント分析、
           </motion.span>
           <motion.span
             className="inline-block mr-2 text-purple-500"
@@ -192,7 +190,7 @@ const Hero = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.6 }}
           >
-            growth prediction.
+            成長予測。
           </motion.span>
           <br />
           <motion.span
@@ -201,7 +199,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.8 }}
           >
-            Harvest the seeds of virality in 3 seconds.
+            バイラル化の種を3秒で収穫する。
           </motion.span>
         </motion.p>
 
@@ -217,7 +215,7 @@ const Hero = () => {
           >
             <span className="relative z-10 flex items-center">
               <Play className="w-5 h-5 mr-2 fill-current" />
-              Get Started Now
+              今すぐ始める
             </span>
             <div
               className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"
@@ -228,8 +226,8 @@ const Hero = () => {
         {/* Enhanced Stats */}
         <motion.div className="grid grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto" variants={containerVariants}>
           {[
-            { number: "99.9%", label: "Analysis Accuracy", color: "text-blue-600" },
-            { number: "3 sec", label: "Average Analysis Time", color: "text-indigo-600" },
+            { number: "99.9%", label: "分析精度", color: "text-blue-600" },
+            { number: "3秒", label: "平均分析時間", color: "text-indigo-600" },
           ].map((stat, index) => (
             <motion.div
               key={index}

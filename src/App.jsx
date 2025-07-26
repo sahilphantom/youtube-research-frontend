@@ -19,11 +19,13 @@ import { AuthProvider } from './context/AuthContext'
 import Footer from './components/Footer'
 import Feature from './components/Feature'
 import FAQ from './components/FAQ'
+import HowToUse from './components/HowToUse'
+import Tools from './components/Tools'
 
 function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Routes>
@@ -34,6 +36,9 @@ function App() {
             <Route path="/pricing" element={<Pricing />} />
               <Route path="/feature" element={<Feature />} />
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/howtouse" element={<HowToUse />} />
+            <Route path="/tools" element={<Tools />} />
+            {/* Error routes */}
             <Route path="/unauthorized" element={<Unauthorized />} />
 
             {/* Protected routes - require authentication */}
