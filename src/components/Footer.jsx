@@ -98,32 +98,7 @@ const Footer = () => {
               {t('footer.description') || 'Transform your YouTube experience with powerful analytics and insights. Join thousands of creators who trust VizzTube.'}
             </motion.p>
             
-            {/* Social Links */}
-            <motion.div 
-              className="flex space-x-4"
-              variants={itemVariants}
-            >
-              {[
-                { icon: Twitter, href: "https://twitter.com", color: "hover:text-blue-400" },
-                { icon: Github, href: "https://github.com", color: "hover:text-gray-300" },
-                { icon: Linkedin, href: "https://linkedin.com", color: "hover:text-blue-500" },
-                { icon: Mail, href: "mailto:contact@vizztube.com", color: "hover:text-green-400" }
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`p-2 rounded-lg bg-white/10 backdrop-blur-sm text-gray-400 transition-colors duration-300 ${social.color}`}
-                  variants={socialVariants}
-                  initial="rest"
-                  whileHover="hover"
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <social.icon className="h-5 w-5" />
-                </motion.a>
-              ))}
-            </motion.div>
+           
           </motion.div>
 
           {/* Links Section */}

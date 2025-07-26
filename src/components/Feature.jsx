@@ -42,7 +42,7 @@ export default function Feature() {
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 dark:text-neutral-100 mb-4">機能概要</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">機能概要</h2>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative z-10">
@@ -69,9 +69,9 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
         ease: "easeOut",
       }}
       className={cn(
-        "flex flex-col lg:border-r text-start  py-10 relative group/feature dark:border-neutral-800",
-        index === 0 && "lg:border-l dark:border-neutral-800",
-        "lg:border-b dark:border-neutral-800",
+        "flex flex-col lg:border-r text-start  py-10 relative group/feature ",
+        index === 0 && "lg:border-l ",
+        "lg:border-b ",
       )}
     >
       <motion.div
@@ -82,7 +82,7 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
       />
 
       <motion.div
-        className="mb-4 relative z-10 px-10 text-indigo-600"
+        className="mb-4 relative z-10 px-10 text-gray-900"
         initial={{ scale: 0, rotate: -180 }}
         animate={isInView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.2 }}
@@ -99,7 +99,7 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
           transition={{ duration: 0.8, delay: index * 0.2 + 0.3 }}
         />
         <motion.span
-          className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-neutral-800 dark:text-neutral-100"
+          className="group-hover/feature:translate-x-2 transition duration-200 inline-block text-black "
           initial={{ x: -20, opacity: 0 }}
           animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
           transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
@@ -109,7 +109,7 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
       </div>
 
       <motion.p
-        className="text-sm px-9 font-medium  text-indigo-600 dark:text-indigo-400 mb-4 relative z-10 "
+        className="text-[12px] px-9 font-medium  text-indigo-600  mb-4 relative z-10 "
         initial={{ x: -20, opacity: 0 }}
         animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
@@ -118,7 +118,7 @@ const FeatureItem = ({ title, subtitle, description, icon, index }) => {
       </motion.p>
 
       <motion.p
-        className="text-sm px-10 text-neutral-600 dark:text-neutral-300 max-w-xs relative z-10  leading-relaxed"
+        className="text-sm px-10 text-black  max-w-xs relative z-10  leading-relaxed"
         initial={{ x: -20, opacity: 0 }}
         animate={isInView ? { x: 0, opacity: 1 } : { x: -20, opacity: 0 }}
         transition={{ duration: 0.6, delay: index * 0.2 + 0.6 }}

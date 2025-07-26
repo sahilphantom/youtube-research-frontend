@@ -56,7 +56,7 @@ export default function FAQ() {
   }
 
   return (
-    <div ref={ref} className="py-20 max-w-7xl mx-auto px-8">
+    <div ref={ref} className="py-14 max-w-7xl mx-auto px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
         {/* Left Side - Title */}
         <motion.div
@@ -69,7 +69,7 @@ export default function FAQ() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-800 dark:text-neutral-100 leading-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-black  leading-tight"
           >
             よくある質問
           </motion.h2>
@@ -104,7 +104,7 @@ export default function FAQ() {
 
 const FAQItem = ({ item, isOpen, onToggle }) => {
   return (
-    <div className="border-b border-neutral-200 dark:border-neutral-800 pb-6">
+    <div className="border-b border-neutral-200  pb-6">
       <motion.button
         onClick={onToggle}
         className="w-full text-left flex items-start justify-between gap-4 group focus:outline-none"
@@ -112,7 +112,7 @@ const FAQItem = ({ item, isOpen, onToggle }) => {
         transition={{ duration: 0.2 }}
       >
         <motion.h3
-          className="text-lg md:text-xl font-medium text-neutral-800 dark:text-neutral-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200 flex-1"
+          className="text-lg md:text-xl font-medium text-black  group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200 flex-1"
           layout
         >
           {item.question}
@@ -126,9 +126,9 @@ const FAQItem = ({ item, isOpen, onToggle }) => {
         >
           <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.3, ease: "easeInOut" }}>
             {isOpen ? (
-              <Minus className="w-6 h-6 text-indigo-600 dark:text-blue-400" />
+              <Minus className="w-6 h-6 text-indigo-600 " />
             ) : (
-              <Plus className="w-6 h-6 text-indigo-600 dark:text-blue-400" />
+              <Plus className="w-6 h-6 text-indigo-600 " />
             )}
           </motion.div>
         </motion.div>
@@ -159,7 +159,7 @@ const FAQItem = ({ item, isOpen, onToggle }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3, delay: 0.2 }}
-                className="text-neutral-600 dark:text-neutral-400 leading-relaxed"
+                className="text-neutral-700  leading-relaxed"
               >
                 {item.answer}
               </motion.p>
