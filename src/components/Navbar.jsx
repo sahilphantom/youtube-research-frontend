@@ -1,22 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
-import {  Home, Youtube, BarChart3, User, Search,  DollarSign, HelpCircle, Mail, LogOut, Menu, X, Globe} from 'lucide-react';
+import {  Home, Youtube, BarChart3, User, Search,  DollarSign, HelpCircle, Mail, LogOut, Menu, X} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showLangMenu, setShowLangMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { t, i18n } = useTranslation();
-
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
-    setShowLangMenu(false);
-  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -32,17 +24,16 @@ const Navbar = () => {
   useEffect(() => {
     setShowMobileMenu(false);
     setShowUserMenu(false);
-    setShowLangMenu(false);
   }, [location.pathname]);
 
   const navItems = [
-    { path: '/', label: t('header.home')  },
-    { path: '/feature', label: t('header.features')},
-    { path: '/tools', label: t('header.tools') },
-    { path: '/howtouse', label: t('header.usage') },
-    { path: '/pricing', label: t('header.pricing')},
-    { path: '/faq', label: t('header.faq') },
-    { path: '/contact', label: t('header.contact'), },
+    { path: '/', label: 'ホーム' },
+    { path: '/feature', label: '機能' },
+    { path: '/tools', label: 'ツール' },
+    { path: '/howtouse', label: '使い方' },
+    { path: '/pricing', label: '料金' },
+    { path: '/faq', label: 'よくある質問' },
+    { path: '/contact', label: 'お問い合わせ' },
   ];
 
   return (
@@ -98,35 +89,6 @@ const Navbar = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 lg:space-x-4">
-              {/* Language Switcher - Desktop */}
-              <div className="hidden md:block relative">
-                <button 
-                  onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-all duration-300 ease-out transform hover:scale-105"
-                >
-                  <Globe className="h-4 w-4" />
-                  <span className="hidden sm:block">{i18n.language === 'ja' ? '日本語' : 'EN'}</span>
-                </button>
-                
-                {/* Language Dropdown */}
-                <div className={`absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 transition-all duration-300 ease-out transform ${
-                  showLangMenu ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
-                }`}>
-                  <button 
-                    onClick={() => changeLanguage('en')} 
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    English
-                  </button>
-                  <button 
-                    onClick={() => changeLanguage('ja')} 
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    日本語
-                  </button>
-                </div>
-              </div>
-
               {/* User Menu or Auth Buttons */}
               {user ? (
                 <div className="relative">
@@ -152,14 +114,14 @@ const Navbar = () => {
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 transform hover:translate-x-1" 
                       onClick={() => setShowUserMenu(false)}
                     >
-                      {t('header.dashboard')}
+                      ダッシュボード
                     </Link>
                     <Link 
                       to="/account" 
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 transform hover:translate-x-1" 
                       onClick={() => setShowUserMenu(false)}
                     >
-                      {t('header.account')}
+                      アカウント
                     </Link>
                     {user.isAdmin && (
                       <Link 
@@ -167,7 +129,7 @@ const Navbar = () => {
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200 transform hover:translate-x-1" 
                         onClick={() => setShowUserMenu(false)}
                       >
-                        {t('header.admin')}
+                        管理者
                       </Link>
                     )}
                     <hr className="my-2 border-gray-100" />
@@ -179,7 +141,7 @@ const Navbar = () => {
                       className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-all duration-200 flex items-center space-x-2 group"
                     >
                       <LogOut className="h-4 w-4 group-hover:rotate-12 transition-transform duration-300" />
-                      <span>{t('header.logout')}</span>
+                      <span>ログアウト</span>
                     </button>
                   </div>
                 </div>
@@ -189,13 +151,13 @@ const Navbar = () => {
                     to="/login" 
                     className="text-sm lg:text-base font-medium text-gray-600 hover:text-gray-900 transition-all duration-300 ease-out transform hover:scale-105 px-3 py-2 rounded-lg hover:bg-gray-50"
                   >
-                    {t('header.login')}
+                    ログイン
                   </Link>
                   <Link 
                     to="/register" 
                     className="group relative inline-flex items-center px-4 py-2 lg:px-6 lg:py-2.5 text-sm lg:text-base font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 rounded-lg transition-all duration-300 ease-out transform hover:scale-105 hover:shadow-lg hover:shadow-indigo-500/25 overflow-hidden"
                   >
-                    <span className="relative z-10">{t('header.signup')}</span>
+                    <span className="relative z-10">新規登録</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out"></div>
                   </Link>
                 </div>
@@ -245,28 +207,6 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            
-            {/* Mobile Language Switcher */}
-            <div className="pt-4 border-t border-gray-100 mt-4">
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => changeLanguage('en')} 
-                  className={`flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    i18n.language === 'en' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  English
-                </button>
-                <button 
-                  onClick={() => changeLanguage('ja')} 
-                  className={`flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-all duration-300 ${
-                    i18n.language === 'ja' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  日本語
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </nav>
