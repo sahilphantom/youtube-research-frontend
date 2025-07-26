@@ -56,7 +56,7 @@ export default function FAQ() {
   }
 
   return (
-    <div ref={ref} className="py-14 max-w-7xl mx-auto px-8">
+    <div ref={ref} className="py-12 max-w-7xl mx-auto px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
         {/* Left Side - Title */}
         <motion.div

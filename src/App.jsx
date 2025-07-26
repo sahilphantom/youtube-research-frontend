@@ -21,6 +21,7 @@ import Feature from './components/Feature'
 import FAQ from './components/FAQ'
 import HowToUse from './components/HowToUse'
 import Tools from './components/Tools'
+import { Contact } from './components/Contact'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/howtouse" element={<HowToUse />} />
             <Route path="/tools" element={<Tools />} />
+            <Route path='/contact' element={<Contact />} />
             {/* Error routes */}
             <Route path="/unauthorized" element={<Unauthorized />} />
 

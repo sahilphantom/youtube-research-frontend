@@ -128,7 +128,7 @@ const Hero = () => {
       >
         {/* Enhanced Badge */}
         <motion.div
-          className="inline-flex items-center px-4 py-2 mb-9 bg-purple-100 border border-purple-200 rounded-full text-sm font-medium text-purple-800"
+          className="inline-flex items-center px-4 py-2 mb-10 bg-purple-100 border border-purple-200 rounded-full text-sm font-medium text-purple-800"
           variants={textVariants}
           whileHover={{ scale: 1.05, y: -2 }}
         >
