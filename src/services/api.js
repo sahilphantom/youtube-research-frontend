@@ -43,7 +43,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response) {
-      // Handle 401 Unauthorized errors
+      // Handle 401 Unauthorized errors ONLY
       if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
@@ -64,26 +64,27 @@ api.interceptors.response.use(
         }
       }
 
-      // Handle other errors
-      console.error('Response error:', error.response.data);
-      
+      // Log different error types but don't interfere with the response
       if (error.response.status === 403) {
-        // Handle forbidden errors (e.g., insufficient permissions)
         console.error('Access forbidden:', error.response.data);
+      } else if (error.response.status === 500) {
+        console.error('Server error:', error.response.data);
+      } else if (error.response.status >= 400) {
+        console.error('Client error:', error.response.status, error.response.data);
       }
       
     } else if (error.request) {
       // Request made but no response
       console.error('Network error:', error.request);
-      error.response = { data: { message: 'Network error - please try again' } };
+      // Don't modify the error for network issues - let the component handle it
     } else {
       // Request setup error
-      console.error('Error:', error.message);
-      error.response = { data: { message: error.message } };
+      console.error('Request setup error:', error.message);
     }
     
+    // Always return the original error so components can handle it properly
     return Promise.reject(error);
   }
 );
 
-export default api; 
+export default api;

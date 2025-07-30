@@ -9,8 +9,7 @@ const ChannelAnalysis = () => {
   const [error, setError] = useState('');
   const [channelData, setChannelData] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!url.trim()) {
       setError('Please enter a YouTube channel URL');
       return;
@@ -22,7 +21,7 @@ const ChannelAnalysis = () => {
 
     try {
       const response = await api.post('/videos/channel-analysis', { channelUrl: url });
-      setChannelData(response.data.channel); // Extract channel object from response
+      setChannelData(response.data.analysis); // Updated to match backend response structure
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch channel information');
     } finally {
@@ -37,20 +36,40 @@ const ChannelAnalysis = () => {
       setLoading(true);
       // Prepare channel overview data
       const channelOverview = {
-        channelId: channelData.id,
-        channelTitle: channelData.title,
+        channelId: channelData.channel.id,
+        channelTitle: channelData.channel.title,
         subscribers: channelData.statistics.subscriberCount,
-        totalVideos: channelData.statistics.videoCount,
-        totalViews: channelData.statistics.viewCount,
-        avgViews: channelData.recentVideos.avgViews
+        totalVideos: channelData.statistics.totalVideoCount,
+        totalViews: channelData.statistics.totalViewCount,
+        avgViews: channelData.videoMetrics.avgViews,
+        avgLikes: channelData.videoMetrics.avgLikes,
+        avgComments: channelData.videoMetrics.avgComments,
+        engagementRate: channelData.performanceMetrics.engagementRate,
+        analyzedVideos: channelData.statistics.analyzedVideoCount
       };
       
-      // Prepare recent videos data
-      const recentVideosData = channelData.recentVideos.videos.map((video, index) => ({
+      // Prepare top videos data
+      const topVideosData = channelData.topPerformingVideos.top10MostViewed.map((video, index) => ({
         rank: index + 1,
         videoId: video.id,
         title: video.title,
         views: video.viewCount,
+        likes: video.likeCount,
+        comments: video.commentCount,
+        duration: video.duration,
+        viewsAboveAverage: video.viewsAboveAverage,
+        publishedAt: new Date(video.publishedAt).toLocaleDateString()
+      }));
+
+      // Prepare viral videos data
+      const viralVideosData = channelData.topPerformingVideos.viralVideos.videos.map((video, index) => ({
+        rank: index + 1,
+        videoId: video.id,
+        title: video.title,
+        views: video.viewCount,
+        likes: video.likeCount,
+        comments: video.commentCount,
+        viewsAboveAverage: video.viewsAboveAverage,
         publishedAt: new Date(video.publishedAt).toLocaleDateString()
       }));
 
@@ -62,15 +81,27 @@ const ChannelAnalysis = () => {
       csvContent += Object.keys(channelOverview).join(',') + '\n';
       csvContent += Object.values(channelOverview).map(value => `"${value}"`).join(',') + '\n\n';
       
-      // Recent videos section
-      csvContent += 'Recent Videos\n';
-      const recentHeaders = Object.keys(recentVideosData[0]);
-      csvContent += recentHeaders.join(',') + '\n';
-      csvContent += recentVideosData.map(video => 
-        Object.values(video).map(value => `"${value}"`).join(',')
-      ).join('\n');
+      // Top 10 videos section
+      csvContent += 'Top 10 Most Viewed Videos\n';
+      if (topVideosData.length > 0) {
+        const topHeaders = Object.keys(topVideosData[0]);
+        csvContent += topHeaders.join(',') + '\n';
+        csvContent += topVideosData.map(video => 
+          Object.values(video).map(value => `"${value}"`).join(',')
+        ).join('\n') + '\n\n';
+      }
       
-      const filename = `channel-analysis_${channelData.title?.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+      // Viral videos section
+      if (viralVideosData.length > 0) {
+        csvContent += 'Viral Videos\n';
+        const viralHeaders = Object.keys(viralVideosData[0]);
+        csvContent += viralHeaders.join(',') + '\n';
+        csvContent += viralVideosData.map(video => 
+          Object.values(video).map(value => `"${value}"`).join(',')
+        ).join('\n');
+      }
+      
+      const filename = `channel-analysis_${channelData.channel.title?.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
       downloadCSV(csvContent, filename);
     } catch (err) {
       setError('Failed to download CSV');
@@ -107,7 +138,7 @@ const ChannelAnalysis = () => {
 
       {/* Input Form */}
       <div className="card mb-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-4">
           <div>
             <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
               YouTube Channel URL
@@ -123,13 +154,13 @@ const ChannelAnalysis = () => {
             />
           </div>
           <button
-            type="submit"
+            onClick={handleSubmit}
             disabled={loading}
             className="btn-primary w-full md:w-auto"
           >
             {loading ? 'Analyzing...' : 'Analyze Channel'}
           </button>
-        </form>
+        </div>
       </div>
 
       {/* Error Message */}
@@ -146,8 +177,12 @@ const ChannelAnalysis = () => {
           <div className="card">
             <div className="flex items-start justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">{channelData.title}</h2>
-                <p className="text-gray-600">Channel ID: {channelData.id}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{channelData.channel.title}</h2>
+                <p className="text-gray-600">Channel ID: {channelData.channel.id}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Created: {new Date(channelData.channel.publishedAt).toLocaleDateString()} • 
+                  Country: {channelData.channel.country}
+                </p>
               </div>
               <button
                 onClick={handleCSVDownload}
@@ -160,7 +195,7 @@ const ChannelAnalysis = () => {
             </div>
 
             {/* Key Metrics */}
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-4 gap-6 mb-6">
               <div className="text-center">
                 <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-2">
                   <Users className="h-6 w-6 text-blue-600" />
@@ -173,7 +208,7 @@ const ChannelAnalysis = () => {
                 <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
                   <Eye className="h-6 w-6 text-green-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.recentVideos.avgViews)}</h3>
+                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.videoMetrics.avgViews)}</h3>
                 <p className="text-sm text-gray-600">Avg Views</p>
               </div>
 
@@ -181,7 +216,7 @@ const ChannelAnalysis = () => {
                 <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-2">
                   <Clock className="h-6 w-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.videoCount)}</h3>
+                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.totalVideoCount)}</h3>
                 <p className="text-sm text-gray-600">Total Videos</p>
               </div>
 
@@ -189,28 +224,44 @@ const ChannelAnalysis = () => {
                 <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-2">
                   <BarChart3 className="h-6 w-6 text-orange-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.viewCount)}</h3>
+                <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.totalViewCount)}</h3>
                 <p className="text-sm text-gray-600">Total Views</p>
+              </div>
+            </div>
+
+            {/* Performance Metrics */}
+            <div className="grid md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg">
+              <div className="text-center">
+                <h4 className="font-semibold text-gray-900">{channelData.performanceMetrics.engagementRate}%</h4>
+                <p className="text-sm text-gray-600">Engagement Rate</p>
+              </div>
+              <div className="text-center">
+                <h4 className="font-semibold text-gray-900">{channelData.performanceMetrics.likesToViewsRatio}%</h4>
+                <p className="text-sm text-gray-600">Like Rate</p>
+              </div>
+              <div className="text-center">
+                <h4 className="font-semibold text-gray-900">{channelData.videoMetrics.avgDuration.formatted}</h4>
+                <p className="text-sm text-gray-600">Avg Duration</p>
               </div>
             </div>
           </div>
 
-          {/* Recent Videos */}
-          {channelData.recentVideos.videos && channelData.recentVideos.videos.length > 0 && (
+          {/* Top 10 Most Viewed Videos */}
+          {channelData.topPerformingVideos.top10MostViewed && channelData.topPerformingVideos.top10MostViewed.length > 0 && (
             <div className="card">
               <div className="flex items-center space-x-2 mb-4">
                 <Star className="h-5 w-5 text-yellow-600" />
-                <h3 className="text-lg font-semibold text-gray-900">Recent Videos</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Top 10 Most Viewed Videos</h3>
               </div>
               <div className="space-y-3">
-                {channelData.recentVideos.videos.map((video, index) => (
+                {channelData.topPerformingVideos.top10MostViewed.map((video, index) => (
                   <div key={video.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <span className="font-semibold text-gray-600">#{index + 1}</span>
                       <div>
                         <h4 className="font-medium text-gray-900">{video.title}</h4>
                         <p className="text-sm text-gray-600">
-                          {formatNumber(video.viewCount)} views • {new Date(video.publishedAt).toLocaleDateString()}
+                          {formatNumber(video.viewCount)} views • {formatDuration(video.duration)} • {video.viewsAboveAverage} avg • {new Date(video.publishedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -228,59 +279,31 @@ const ChannelAnalysis = () => {
             </div>
           )}
 
-          {/* Top Videos */}
-          {channelData.topVideos && channelData.topVideos.length > 0 && (
-            <div className="card">
-              <div className="flex items-center space-x-2 mb-4">
-                <Star className="h-5 w-5 text-yellow-600" />
-                <h3 className="text-lg font-semibold text-gray-900">Top 10 Most Viewed Videos</h3>
-              </div>
-              <div className="space-y-3">
-                {channelData.topVideos.map((video, index) => (
-                  <div key={video.videoId} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <span className="font-semibold text-gray-600">#{index + 1}</span>
-                      <div>
-                        <h4 className="font-medium text-gray-900">{video.title}</h4>
-                        <p className="text-sm text-gray-600">
-                          {formatNumber(video.views)} views • {new Date(video.publishedAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <a
-                      href={`https://www.youtube.com/watch?v=${video.videoId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary-600 hover:text-primary-700 text-sm"
-                    >
-                      Watch
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Outlier Videos */}
-          {channelData.outlierVideos && channelData.outlierVideos.length > 0 && (
+          {/* Viral Videos */}
+          {channelData.topPerformingVideos.viralVideos.videos && channelData.topPerformingVideos.viralVideos.videos.length > 0 && (
             <div className="card">
               <div className="flex items-center space-x-2 mb-4">
                 <AlertTriangle className="h-5 w-5 text-orange-600" />
-                <h3 className="text-lg font-semibold text-gray-900">Outlier Videos (5x+ Average Views)</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Viral Videos ({channelData.topPerformingVideos.viralVideos.count})
+                </h3>
+                <span className="text-sm text-gray-500">
+                  ({channelData.topPerformingVideos.viralVideos.threshold})
+                </span>
               </div>
               <div className="space-y-3">
-                {channelData.outlierVideos.map((video) => (
-                  <div key={video.videoId} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                {channelData.topPerformingVideos.viralVideos.videos.map((video) => (
+                  <div key={video.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div>
                         <h4 className="font-medium text-gray-900">{video.title}</h4>
                         <p className="text-sm text-gray-600">
-                          {formatNumber(video.views)} views • {(video.views / channelData.avgViews).toFixed(1)}x average
+                          {formatNumber(video.viewCount)} views • {video.viewsAboveAverage} average • {new Date(video.publishedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <a
-                      href={`https://www.youtube.com/watch?v=${video.videoId}`}
+                      href={video.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary-600 hover:text-primary-700 text-sm"
@@ -293,15 +316,50 @@ const ChannelAnalysis = () => {
             </div>
           )}
 
+          {/* Content Analysis */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Duration Distribution */}
+            <div className="card">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Duration Distribution</h3>
+              <div className="space-y-2">
+                {Object.entries(channelData.contentAnalysis.durationDistribution).map(([range, count]) => (
+                  <div key={range} className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 capitalize">{range.replace(/([a-z])([A-Z])/g, '$1 $2')}</span>
+                    <span className="font-medium">{count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Upload Analysis */}
+            <div className="card">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Insights</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Videos Analyzed</span>
+                  <span className="font-medium">{channelData.statistics.analyzedVideoCount}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Avg Days Between Uploads</span>
+                  <span className="font-medium">{channelData.contentAnalysis.videoFrequency.avgDaysBetweenUploads}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Analysis Period</span>
+                  <span className="font-medium capitalize">{channelData.analysisMetadata.analyzedPeriod}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Top Tags */}
-          {channelData.topTags && channelData.topTags.length > 0 && (
+          {channelData.contentAnalysis.topTags && channelData.contentAnalysis.topTags.length > 0 && (
             <div className="card">
               <div className="flex items-center space-x-2 mb-4">
                 <TrendingUp className="h-5 w-5 text-green-600" />
                 <h3 className="text-lg font-semibold text-gray-900">Most Used Tags</h3>
               </div>
               <div className="flex flex-wrap gap-2">
-                {channelData.topTags.map(([tag, count]) => (
+                {channelData.contentAnalysis.topTags.slice(0, 20).map(({ tag, count }) => (
                   <span
                     key={tag}
                     className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm"
@@ -313,26 +371,30 @@ const ChannelAnalysis = () => {
             </div>
           )}
 
-          {/* Upload Time Distribution */}
-          {channelData.uploadHourDist && Object.keys(channelData.uploadHourDist).length > 0 && (
-            <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Time Distribution (UTC)</h3>
-              <div className="grid grid-cols-6 md:grid-cols-12 gap-2">
-                {Array.from({ length: 24 }, (_, hour) => (
-                  <div key={hour} className="text-center">
-                    <div className="text-xs text-gray-600 mb-1">{hour}:00</div>
-                    <div className="bg-blue-100 rounded text-xs p-1">
-                      {channelData.uploadHourDist[hour] || 0}
-                    </div>
-                  </div>
-                ))}
+
+
+          {/* Analysis Metadata */}
+          <div className="card bg-gray-50">
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">Analysis Summary</h3>
+            <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <span className="text-gray-600">Analyzed at:</span>
+                <p className="font-medium">{new Date(channelData.analysisMetadata.analyzedAt).toLocaleString()}</p>
+              </div>
+              <div>
+                <span className="text-gray-600">Videos processed:</span>
+                <p className="font-medium">{channelData.analysisMetadata.totalVideosAnalyzed}</p>
+              </div>
+              <div>
+                <span className="text-gray-600">API calls used:</span>
+                <p className="font-medium">{channelData.analysisMetadata.apiCallsUsed}</p>
               </div>
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>
   )
 }
 
-export default ChannelAnalysis 
+export default ChannelAnalysis

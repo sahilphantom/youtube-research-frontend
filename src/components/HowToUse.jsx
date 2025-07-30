@@ -32,20 +32,20 @@ export default function HowToUse() {
   const steps = [
     {
       number: "01",
-      title: "アカウント登録とログイン",
-      description: "トップページから「新規登録」ボタンをクリックしてください。メールアドレスとパスワードを入力し、アカウントを作成します。登録後、ログインページからログインしてください。",
+      title: "アカウント登録",
+      description: "まずはトップページの「新規登録」ボタンをクリック。メールアドレスとパスワードを入力するだけで、すぐにアカウントを作成できます。",
       icon: UserPlus,
     },
     {
       number: "02",
-      title: "サブスクリプションの開始",
-      description: "ログイン後、プランの選択ページが表示されます。「Startプラン」または「Basicプラン」を選び、Stripe決済にてサブスクリプションを開始してください。お支払いが完了すると、ツールへのアクセスが可能になります。",
+      title: "決済",
+      description: "登録後、目的に応じた料金プランを選択し、クレジットカードまたはデビットカードでお支払いください。決済は数秒で完了し、その場で全機能が開放されます。安心してご利用いただけます。",
       icon: CreditCard,
     },
     {
       number: "03",
-      title: "各ツールの使い方",
-      description: "動画検索、チャンネル分析、動画詳細分析など、YouTubeマーケティングに必要な機能をご利用いただけます。",
+      title: "ツール利用開始",
+      description: "決済後すぐにツールを利用できます。動画URLやチャンネルURLを入力するだけで分析が始まり、数値や傾向をすぐに確認できます。また、キーワードやカテゴリから動画を探せる検索機能も搭載。あなたのYouTube戦略を支える強力なリサーチツールとして、すぐに活用可能です。",
       icon: BarChart3,
     },
   ]
@@ -88,11 +88,9 @@ export default function HowToUse() {
               How It Works
             </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight px-2">
-              使い方ガイド - YouTubeリサーチツール
+             ツールご利用までのカンタン３ステップ
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-4">
-              当サービスは、YouTubeチャンネルの分析や動画の検索、パフォーマンスの可視化などを通して、マーケティングやコンテンツ戦略をサポートするためのツールです。
-            </p>
+           
           </motion.div>
 
           {/* Steps */}

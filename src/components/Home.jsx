@@ -24,9 +24,28 @@ export default function Home() {
     <div>
       {/* Hero Section */}
       <Hero />
+
+        {/* Newly designed div with Japanese content */}
+      <motion.div
+        className="max-w-4xl mx-auto mt-8 mb-16 p-10 bg-purple-50 rounded-xl shadow-lg text-center border border-purple-200"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+      >
+        <h2 className="text-3xl font-bold mb-6 text-indigo-800">VizzTube（ヴィズチューブ）とは？</h2>
+        <p className="text-lg text-gray-700 leading-relaxed">
+         このツールは、YouTubeの動画やチャンネル、検索ワードに対して詳細なデータ分析を行い、
+バズっている理由・傾向を数値から読み解けるリサーチツールです。
+動画URLやチャンネルURLを入れるだけで、再生数や評価、投稿時間帯、人気のタグなどを自動取得。
+気になるジャンルの競合調査や、ヒット傾向の可視化が、誰でも簡単にできます。
+さらにCSV出力にも対応しており、外部分析ツールとの連携もスムーズです。
+        </p>
+      </motion.div>
+
       
       {/* Features Section */}
-      <Feature />
+      {/* <Feature /> */}
       <HowToUse />
       <Tools />
       <FAQ />
@@ -68,20 +87,7 @@ export default function Home() {
           </div>
         )}
 
-      {/* Newly designed div with Japanese content */}
-      <motion.div
-        className="max-w-4xl mx-auto mt-8 mb-16 p-10 bg-purple-50 rounded-xl shadow-lg text-center border border-purple-200"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, delay: 0.6 }}
-      >
-        <h2 className="text-3xl font-bold mb-6 text-indigo-800">かつてないほどYouTubeコンテンツを分析</h2>
-        <p className="text-lg text-gray-700 leading-relaxed">
-          当社の強力なツールは、詳細な洞察とデータエクスポートにより、YouTube動画、チャンネル、トレンドを調査・分析するのに役立ちます。コンテンツがバイラルになる理由を発見し、データに基づいた意思決定で戦略を最適化しましょう。
-        </p>
-      </motion.div>
-
+    
         {/* Contact Section */}
         <div className="grid md:grid-cols-2 gap-12">
           <motion.div

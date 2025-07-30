@@ -21,8 +21,11 @@ export default function Pricing() {
     try {
       const response = await api.get('/stripe/plans');
       setPlans(response.data.plans);
+      // console.log(response.data.plans)
+      
     } catch (err) {
       setError('Failed to load subscription plans');
+      console.error('Error fetching plans:', err);
     } finally {
       setLoading(false);
     }
@@ -43,6 +46,21 @@ export default function Pricing() {
       setError(err.response?.data?.message || 'Failed to start checkout');
       setSubscribing(false);
     }
+  };
+
+  // Helper function to get plan description
+  const getPlanDescription = (planId) => {
+    const descriptions = {
+      'start': 'Perfect for getting started with YouTube research',
+      'basic': 'Advanced features for serious content creators'
+    };
+    return descriptions[planId] || 'Access to YouTube research tools';
+  };
+
+  // Helper function to format interval display
+  const formatInterval = (interval) => {
+    if (!interval) return '/month';
+    return `/${interval}`;
   };
 
   if (loading) {
@@ -152,7 +170,7 @@ export default function Pricing() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.2 + 0.6 }}
               >
-                {plan.description}
+                {getPlanDescription(plan.id)}
               </motion.p>
               <motion.p 
                 className="mt-8"
@@ -167,15 +185,31 @@ export default function Pricing() {
                 }}
               >
                 <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
-                <span className="text-base font-medium text-gray-500">/month</span>
+                <span className="text-base font-medium text-gray-500">{formatInterval(plan.interval)}</span>
               </motion.p>
+              
+              {/* Display additional plan info if available */}
+              {plan.currency && plan.currency !== 'jpy' && (
+                <motion.p 
+                  className="mt-2 text-sm text-gray-400"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.2 + 0.8 }}
+                >
+                  Currency: {plan.currency.toUpperCase()}
+                </motion.p>
+              )}
+
               <motion.button
                 onClick={() => handleSubscribe(plan.priceId)}
-                disabled={subscribing || (user?.isSubscribed)}
-                className={`mt-8 w-full py-3 px-4 rounded-lg text-white font-medium ${
-                  subscribing || (user?.isSubscribed)
+                disabled={subscribing || (user?.isSubscribed && user?.subscriptionPlan === plan.id)}
+                className={`mt-8 w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-200 ${
+                  subscribing || (user?.isSubscribed && user?.subscriptionPlan === plan.id)
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-indigo-500 hover:bg-indigo-600'
+                    : user?.isSubscribed && user?.subscriptionPlan !== plan.id
+                      ? 'bg-orange-500 hover:bg-orange-600'
+                      : 'bg-indigo-500 hover:bg-indigo-600'
                 }`}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -186,22 +220,54 @@ export default function Pricing() {
                   type: "spring",
                   stiffness: 100
                 }}
-                whileHover={!(subscribing || (user?.isSubscribed)) ? { 
+                whileHover={!(subscribing || (user?.isSubscribed && user?.subscriptionPlan === plan.id)) ? { 
                   scale: 1.05,
                   boxShadow: "0 10px 15px -3px rgba(79, 70, 229, 0.3)"
                 } : {}}
-                whileTap={!(subscribing || (user?.isSubscribed)) ? { scale: 0.98 } : {}}
+                whileTap={!(subscribing || (user?.isSubscribed && user?.subscriptionPlan === plan.id)) ? { scale: 0.98 } : {}}
               >
-                {user?.isSubscribed 
-                  ? 'Currently Subscribed'
-                  : subscribing 
-                    ? 'Processing...' 
-                    : `Subscribe to ${plan.name}`}
+                {user?.isSubscribed && user?.subscriptionPlan === plan.id
+                  ? 'Current Plan'
+                  : user?.isSubscribed && user?.subscriptionPlan !== plan.id
+                    ? `Switch to ${plan.name}`
+                    : subscribing 
+                      ? 'Processing...' 
+                      : `Subscribe to ${plan.name}`}
               </motion.button>
+
+              {/* Show current plan indicator */}
+              {user?.isSubscribed && user?.subscriptionPlan === plan.id && (
+                <motion.div
+                  className="mt-3 flex items-center justify-center"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.2 + 1 }}
+                >
+                  <div className="flex items-center space-x-1 text-green-600">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-sm font-medium">Active</span>
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           </motion.div>
         ))}
       </motion.div>
+
+      {plans.length === 0 && !loading && (
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="text-gray-500">No subscription plans available at the moment.</p>
+        </motion.div>
+      )}
     </motion.div>
   );
 }

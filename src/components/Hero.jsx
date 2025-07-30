@@ -133,7 +133,7 @@ const Hero = () => {
           whileHover={{ scale: 1.05, y: -2 }}
         >
           <Sparkles className="w-4 h-4 mr-2 text-purple-600" />
-          YouTube分析の未来
+          YouTubeリサーチツール
           <ArrowRight className="w-4 h-4 ml-2" />
         </motion.div>
 
@@ -150,17 +150,10 @@ const Hero = () => {
               }}
               transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY }}
             >
-              成長する動画を、
+             YouTubeの勝ちパターンを、データで見抜く
             </motion.span>
           </span>
-          <motion.span
-            className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            丸裸にする。
-          </motion.span>
+          
         </motion.h1>
 
         {/* Enhanced Sub Catchphrase */}
@@ -169,37 +162,12 @@ const Hero = () => {
           variants={textVariants}
         >
           <motion.span
-            className="inline-block mr-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-          >
-            トレンドチェック、
-          </motion.span>
-          <motion.span
-            className="inline-block mr-2 text-indigo-500"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.0, duration: 0.6 }}
-          >
-            コメント分析、
-          </motion.span>
-          <motion.span
-            className="inline-block mr-2 text-purple-500"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-          >
-            成長予測。
-          </motion.span>
-          <br />
-          <motion.span
             className="inline-block bg-gradient-to-r from-gray-600 to-gray-600 bg-clip-text text-transparent font-semibold drop-shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: 0.8 }}
           >
-            バイラル化の種を3秒で収穫する。
+          分析から生まれる、次のヒットアイデア
           </motion.span>
         </motion.p>
 
@@ -223,30 +191,7 @@ const Hero = () => {
           </motion.button>
         </motion.div>
 
-        {/* Enhanced Stats */}
-        <motion.div className="grid grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto" variants={containerVariants}>
-          {[
-            { number: "99.9%", label: "分析精度", color: "text-blue-600" },
-            { number: "3秒", label: "平均分析時間", color: "text-indigo-600" },
-          ].map((stat, index) => (
-            <motion.div
-              key={index}
-              className="text-center p-6 bg-transparent rounded-2xl"
-              variants={textVariants}
-              whileHover={{ y: -5, scale: 1.02 }}
-            >
-              <motion.div
-                className={`text-4xl lg:text-5xl font-bold ${stat.color} mb-2`}
-                variants={pulseVariants}
-                animate="animate"
-                style={{ animationDelay: `${index * 0.5}s` }}
-              >
-                {stat.number}
-              </motion.div>
-              <div className="text-gray-700 text-sm font-medium">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
+       
       </motion.div>
 
       {/* Enhanced Scroll Indicator */}
