@@ -51,8 +51,8 @@ export default function Pricing() {
   // Helper function to get plan description
   const getPlanDescription = (planId) => {
     const descriptions = {
-      'start': 'Perfect for getting started with YouTube research',
-      'basic': 'Advanced features for serious content creators'
+      'start': 'YouTubeリサーチの入門に最適',
+'basic': '本格的なクリエイター向けの高度な機能',
     };
     return descriptions[planId] || 'Access to YouTube research tools';
   };
@@ -101,7 +101,7 @@ export default function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          Get access to powerful YouTube research tools
+        '強力なYouTubeリサーチツールにアクセスしましょう
         </motion.p>
       </motion.div>
 
@@ -265,7 +265,7 @@ export default function Pricing() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <p className="text-gray-500">No subscription plans available at the moment.</p>
+          <p className="text-gray-500">現在、利用可能なサブスクリプションプランはありません。</p>
         </motion.div>
       )}
     </motion.div>

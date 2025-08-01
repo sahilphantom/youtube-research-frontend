@@ -26,9 +26,9 @@ const SuccessPage = () => {
 
     pollingRef.current = true;
     try {
-      console.log('🔁 Checking payment status...');
+      console.log('🔁 決済ステータスを確認中...');
       const response = await api.get(`/stripe/session-status?sessionId=${sessionId}`);
-      console.log('✅ Payment status response:', response.data);
+      console.log('✅ 決済ステータスの応答:', response.data);
 
       if (response.data.paymentStatus === 'paid') {
         clearCheckInterval();
@@ -42,21 +42,21 @@ const SuccessPage = () => {
       if (retryCountRef.current >= MAX_RETRIES) {
         clearCheckInterval();
         setStatus('error');
-        setError('Payment verification timeout. Please contact support.');
+        setError('決済の確認に時間がかかっています。サポートにご連絡ください。');
         return false;
       }
 
       return false;
     } catch (err) {
-      console.error('❌ Payment verification error:', err);
+      console.error('❌ 決済確認エラー:', err);
 
       retryCountRef.current += 1;
       if (retryCountRef.current >= MAX_RETRIES) {
         clearCheckInterval();
         setStatus('error');
-        setError('Payment verification failed after multiple attempts. Please contact support.');
+        setError('複数回確認に失敗しました。サポートにご連絡ください。');
       } else {
-        setError(err.response?.data?.message || 'Failed to verify payment');
+        setError(err.response?.data?.message || '決済の確認に失敗しました');
       }
 
       return false;
@@ -71,7 +71,7 @@ const SuccessPage = () => {
 
     if (!sessionId || !token) {
       setStatus('error');
-      setError('Missing session information');
+      setError('セッション情報が不足しています');
       return;
     }
 
@@ -98,25 +98,25 @@ const SuccessPage = () => {
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         {status === 'loading' && (
           <div className="text-center">
-            <h2 className="text-2xl font-semibold mb-4">Processing Payment</h2>
-            <p className="text-gray-600">Please wait while we verify your payment...</p>
+            <h2 className="text-2xl font-semibold mb-4">お支払いを処理中</h2>
+            <p className="text-gray-600">決済の確認中です。しばらくお待ちください...</p>
           </div>
         )}
         {status === 'success' && (
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-green-600 mb-4">Payment Successful!</h2>
-            <p className="text-gray-600">Redirecting you to the dashboard...</p>
+            <h2 className="text-2xl font-semibold text-green-600 mb-4">お支払いが完了しました！</h2>
+            <p className="text-gray-600">ダッシュボードへリダイレクト中です...</p>
           </div>
         )}
         {status === 'error' && (
           <div className="text-center">
-            <h2 className="text-2xl font-semibold text-red-600 mb-4">Payment Error</h2>
+            <h2 className="text-2xl font-semibold text-red-600 mb-4">お支払いエラー</h2>
             <p className="text-gray-600">{error}</p>
             <button 
               onClick={() => navigate('/dashboard')}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              Return to Dashboard
+              ダッシュボードに戻る
             </button>
           </div>
         )}

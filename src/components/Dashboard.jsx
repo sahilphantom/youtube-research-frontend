@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 // Mock components for demo
 
@@ -8,6 +9,11 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  // Add this to your Dashboard component to check the token
+useEffect(() => {
+  console.log('Current user:', user);
+  console.log('Token in storage:', localStorage.getItem('token'));
+}, [user]);
 
   return (
     <div className="min-h-screen">
@@ -16,6 +22,8 @@ export default function Dashboard() {
           <h1 className="text-4xl font-light text-gray-800 mb-2">
             おかえりなさい、{user?.email}さん
           </h1>
+      
+
           <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"></div>
         </div>
 
@@ -157,28 +165,29 @@ export default function Dashboard() {
                 to="/account"
                 className="flex items-center p-4 bg-white/50 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/50 transition-all duration-200"
               >
-                <svg className="w-5 h-5 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-6 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <span className="text-gray-700 font-medium">アカウント設定</span>
               </Link>
-              {user?.isAdmin && (
-                <Link
-                  to="/admin/users"
-                  className="flex items-center p-4 bg-white/50 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all duration-200"
-                >
-                  <svg className="w-5 h-5 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                  </svg>
-                  <span className="text-gray-700 font-medium">管理者パネル</span>
-                </Link>
-              )}
+             {user?.role === 'admin' &&  (
+  <Link
+    to="/admin/users"
+    className="flex items-center p-4 bg-white/50 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition-all duration-200"
+  >
+    <svg className="w-7 h-6 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+    </svg>
+    <span className="text-gray-700 font-medium">管理者パネル</span>
+  </Link>
+)}
+
               <Link
                 to="/pricing"
                 className="flex items-center p-4 bg-white/50 rounded-xl border border-gray-100 hover:border-green-200 hover:bg-green-50/50 transition-all duration-200"
               >
-                <svg className="w-5 h-5 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-7 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
                 </svg>
                 <span className="text-gray-700 font-medium">プランをアップグレード</span>

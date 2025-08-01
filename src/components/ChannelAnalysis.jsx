@@ -132,8 +132,9 @@ const ChannelAnalysis = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Channel Analysis</h1>
-        <p className="text-gray-600">Comprehensive analysis of YouTube channels</p>
+       <h1 className="text-3xl font-bold text-gray-900 mb-2">チャンネル分析</h1>
+<p className="text-gray-600">YouTubeチャンネルの包括的な分析</p>
+
       </div>
 
       {/* Input Form */}
@@ -141,7 +142,7 @@ const ChannelAnalysis = () => {
         <div className="space-y-4">
           <div>
             <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-              YouTube Channel URL
+           YouTubeチャンネルのURL
             </label>
             <input
               type="url"
@@ -158,7 +159,7 @@ const ChannelAnalysis = () => {
             disabled={loading}
             className="btn-primary w-full md:w-auto"
           >
-            {loading ? 'Analyzing...' : 'Analyze Channel'}
+            {loading ? '分析中...' : 'チャンネルを分析'}
           </button>
         </div>
       </div>
@@ -190,7 +191,7 @@ const ChannelAnalysis = () => {
                 className="btn-secondary flex items-center space-x-2"
               >
                 <Download className="h-4 w-4" />
-                <span>Export CSV</span>
+                <span>CSVをエクスポート</span>
               </button>
             </div>
 

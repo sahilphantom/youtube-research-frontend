@@ -73,14 +73,16 @@ export const AuthProvider = ({ children }) => {
   }, [navigate]);
 
   const value = {
-    user,
-    loading,
-    isAuthenticated: !!user,
-    login: handleLogin,
-    signup: handleSignup,     // ✅ Added here
-    logout: handleLogout,
-    refreshUser: fetchUserData
-  };
+  user,
+  loading,
+  isAuthenticated: !!user,
+  token: localStorage.getItem('token'), 
+  login: handleLogin,
+  signup: handleSignup,
+  logout: handleLogout,
+  refreshUser: fetchUserData
+};
+
 
   return (
     <AuthContext.Provider value={value}>

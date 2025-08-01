@@ -111,8 +111,9 @@ const VideoSearch = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Video Search</h1>
-        <p className="text-gray-600">Search YouTube videos with advanced filters</p>
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">動画検索</h1>
+<p className="text-gray-600">高度なフィルターでYouTube動画を検索</p>
+
       </div>
 
       {/* Search Form */}
@@ -121,7 +122,8 @@ const VideoSearch = () => {
           {/* Basic Search */}
           <div>
             <label htmlFor="query" className="block text-sm font-medium text-gray-700 mb-2">
-              Search Query
+           検索クエリ
+
             </label>
             <input
               type="text"
@@ -142,14 +144,14 @@ const VideoSearch = () => {
               className="btn-secondary flex items-center space-x-2"
             >
               <Filter className="h-4 w-4" />
-              <span>{showFilters ? 'Hide' : 'Show'} Advanced Filters</span>
+              <span>{showFilters ? 'Hide' : 'Show'} 高度なフィルター</span>
             </button>
             <button
               type="submit"
               disabled={loading}
               className="btn-primary"
             >
-              {loading ? 'Searching...' : 'Search Videos'}
+              {loading ? '検索中...' : '動画を検索'}
             </button>
           </div>
 
@@ -159,7 +161,7 @@ const VideoSearch = () => {
               {/* Date Range */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Upload Date Range
+                 アップロード期間
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <input
@@ -181,7 +183,7 @@ const VideoSearch = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sort By
+                    並び替え
                   </label>
                   <select
                     value={searchParams.sortBy}
@@ -197,7 +199,7 @@ const VideoSearch = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Video Type
+                   動画の種類
                   </label>
                   <select
                     value={searchParams.videoType}
@@ -214,7 +216,7 @@ const VideoSearch = () => {
               {/* Channel Filters */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Channel Subscriber Range
+                 チャンネル登録者数の範囲
                 </label>
                 <input
                   type="text"
@@ -227,7 +229,7 @@ const VideoSearch = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  View-to-Subscriber Ratio
+                 再生数と登録者数の比率
                 </label>
                 <input
                   type="number"
@@ -241,7 +243,7 @@ const VideoSearch = () => {
               {/* Results Count */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Max Results
+                 最大結果数
                 </label>
                 <select
                   value={searchParams.maxResults}
@@ -272,7 +274,7 @@ const VideoSearch = () => {
           {/* Results Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Search Results</h2>
+              <h2 className="text-2xl font-bold text-gray-900">検索結果</h2>
               <p className="text-gray-600">
                 Found {searchResults.totalResults} videos (showing {searchResults.videos.length})
               </p>
@@ -283,7 +285,7 @@ const VideoSearch = () => {
               className="btn-secondary flex items-center space-x-2"
             >
               <Download className="h-4 w-4" />
-              <span>Export CSV</span>
+              <span>CSVをエクスポート</span>
             </button>
           </div>
 
@@ -344,7 +346,7 @@ const VideoSearch = () => {
           {searchResults.videos.length === 0 && (
             <div className="text-center py-12">
               <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No videos found matching your criteria</p>
+              <p className="text-gray-600">条件に一致する動画が見つかりませんでした</p>
             </div>
           )}
         </div>

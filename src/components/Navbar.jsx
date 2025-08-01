@@ -28,7 +28,7 @@ const Navbar = () => {
 
   const navItems = [
     { path: '/', label: 'ホーム' },
-    { path: '/feature', label: '機能' },
+    // { path: '/feature', label: '機能' },
     { path: '/tools', label: 'ツール' },
     { path: '/howtouse', label: '使い方' },
     { path: '/pricing', label: '料金' },

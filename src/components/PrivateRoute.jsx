@@ -18,8 +18,8 @@ export default function PrivateRoute({ children, requireSubscription = false, re
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check admin access
-  if (requireAdmin && !user.isAdmin) {
+  // ✅ FIXED: Check admin access using role instead of isAdmin
+  if (requireAdmin && user.role !== 'admin') {
     return <Navigate to="/unauthorized" state={{ from: location }} replace />;
   }
 
@@ -29,4 +29,4 @@ export default function PrivateRoute({ children, requireSubscription = false, re
   }
 
   return children;
-} 
+}

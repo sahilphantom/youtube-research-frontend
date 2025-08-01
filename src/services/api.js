@@ -16,7 +16,7 @@ const getStoredToken = () => localStorage.getItem('token');
 const handleAuthError = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('userData');
-  if (window.location.pathname !== '/login') {
+  if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
     window.location.href = '/login';
   }
 };
@@ -36,35 +36,19 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor
+// Response interceptor - SIMPLIFIED (no token refresh)
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
+  (error) => {
     if (error.response) {
-      // Handle 401 Unauthorized errors ONLY
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-
-        try {
-          // Try to refresh the token
-          const response = await api.post('/auth/refresh');
-          const { token } = response.data;
-          
-          if (token) {
-            localStorage.setItem('token', token);
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-            return api(originalRequest);
-          }
-        } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
-          handleAuthError();
-          return Promise.reject(refreshError);
-        }
+      // Handle 401 Unauthorized errors - redirect to login
+      if (error.response.status === 401) {
+        console.error('Authentication failed - redirecting to login');
+        handleAuthError();
+        return Promise.reject(error);
       }
 
-      // Log different error types but don't interfere with the response
+      // Handle 403 Forbidden errors (like admin access denied)
       if (error.response.status === 403) {
         console.error('Access forbidden:', error.response.data);
       } else if (error.response.status === 500) {
@@ -76,7 +60,6 @@ api.interceptors.response.use(
     } else if (error.request) {
       // Request made but no response
       console.error('Network error:', error.request);
-      // Don't modify the error for network issues - let the component handle it
     } else {
       // Request setup error
       console.error('Request setup error:', error.message);
