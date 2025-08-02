@@ -133,8 +133,7 @@ export default function AdminUsers() {
         user._id === userId ? { ...user, role: newRole } : user
       ));
       
-      // Optional: Show success message
-      // alert(data.message);
+    
     } catch (err) {
       console.error('Update role error:', err);
       alert('Failed to update user role: ' + err.message);
@@ -162,8 +161,7 @@ export default function AdminUsers() {
         user._id === userId ? { ...user, suspended: suspend } : user
       ));
       
-      // Optional: Show success message
-      // alert(data.message);
+    
     } catch (err) {
       console.error('Toggle status error:', err);
       alert('Failed to update user status: ' + err.message);
@@ -191,9 +189,7 @@ export default function AdminUsers() {
 
       setUsers(users.filter(user => user._id !== userId));
       
-      // Optional: Show success message
-      // const data = await response.json();
-      // alert(data.message);
+     
     } catch (err) {
       console.error('Delete user error:', err);
       alert('Failed to delete user: ' + err.message);
@@ -228,13 +224,11 @@ export default function AdminUsers() {
         throw new Error(errorData.message || `Failed to ${action} users`);
       }
 
-      // Refresh the users list after bulk operation
+     
       fetchUsers();
       setSelectedUsers([]);
       
-      // Optional: Show success message
-      // const data = await response.json();
-      // alert(data.message);
+    
     } catch (err) {
       console.error('Bulk action error:', err);
       alert(`Failed to ${action} users: ` + err.message);
@@ -268,7 +262,7 @@ export default function AdminUsers() {
   };
 
   const sendEmail = async (userId, subject, message) => {
-    // Email functionality removed as requested
+   
     alert('Email functionality has been removed');
   };
 
@@ -593,8 +587,7 @@ export default function AdminUsers() {
                         onChange={(e) => updateUserRole(user._id, e.target.value)}
                         className={`px-2 py-1 text-xs font-semibold rounded-full border-0 ${getRoleColor(user.role)}`}
                       >
-                        <option value="user">User</option>
-                        <option value="moderator">Moderator</option>
+                        <option value="user">User</option>                      
                         <option value="admin">Admin</option>
                       </select>
                     </td>
