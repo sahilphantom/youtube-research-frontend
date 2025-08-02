@@ -1,10 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SubscriptionStatus from './SubscriptionStatus';
 import Hero from './Hero';
-import Feature from './Feature';
 import FAQ from './FAQ';
 import HowToUse from './HowToUse';
 import Tools from './Tools';
@@ -44,15 +42,14 @@ export default function Home() {
       </motion.div>
 
       
-      {/* Features Section */}
-      {/* <Feature /> */}
+     
       <HowToUse />
       <Tools />
       <FAQ />
 
       {/* Content Section */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
-        {token && <SubscriptionStatus />}
+      {/* <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
+        {token && <SubscriptionStatus />} */}
 
         {/* {!token && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
@@ -65,7 +62,7 @@ export default function Home() {
           </div>
         )} */}
 
-        {token && !isSubscribed && (
+        {/* {token && !isSubscribed && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
             <h3 className="text-lg font-semibold text-yellow-800 mb-2">
               Upgrade to Premium
@@ -85,7 +82,7 @@ export default function Home() {
               You have full access to all features. Start analyzing and discover the next viral hit!
             </p>
           </div>
-        )}
+        )} */}
 
     
         {/* Contact Section */}
@@ -106,6 +103,6 @@ export default function Home() {
           <Contact />
         </div>
       </div>
-    </div>
+    
   );
 }

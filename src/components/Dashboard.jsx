@@ -12,7 +12,6 @@ export default function Dashboard() {
   // Add this to your Dashboard component to check the token
 useEffect(() => {
   console.log('Current user:', user);
-  console.log('Token in storage:', localStorage.getItem('token'));
 }, [user]);
 
   return (

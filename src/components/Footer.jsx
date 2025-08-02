@@ -170,8 +170,8 @@ const Footer = () => {
           </div>
         </div>
            {/* Large Watermark Text at Bottom - Like DevStudio */}
-      <div className=" bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
-        <div className="text-gray-500/20 font-bold text-[4rem] xs:text-[5rem] sm:text-[7rem] md:text-[9rem] lg:text-[12rem] xl:text-[15rem] 2xl:text-[18rem] select-none leading-none whitespace-nowrap pb-2 sm:pb-4">
+      <div className=" bottom-0 left-0 right-0 mt-12 flex items-end justify-center pointer-events-none z-0 overflow-hidden">
+        <div className="text-gray-500/20 font-bold text-[5rem]  sm:text-[8rem] md:text-[10rem] lg:text-[14rem] xl:text-[18rem] 2xl:text-[18rem] select-none leading-none whitespace-nowrap ">
           VizzTube
         </div>
       </div>
