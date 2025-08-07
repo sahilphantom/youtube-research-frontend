@@ -11,7 +11,7 @@ const ChannelAnalysis = () => {
 
   const handleSubmit = async () => {
     if (!url.trim()) {
-      setError('Please enter a YouTube channel URL');
+      setError('YouTubeチャンネルのURLを入力してください');
       return;
     }
 
@@ -23,7 +23,7 @@ const ChannelAnalysis = () => {
       const response = await api.post('/videos/channel-analysis', { channelUrl: url });
       setChannelData(response.data.analysis); // Updated to match backend response structure
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch channel information');
+      setError(err.response?.data?.message || 'チャンネル情報の取得に失敗しました');
     } finally {
       setLoading(false);
     }
@@ -104,7 +104,7 @@ const ChannelAnalysis = () => {
       const filename = `channel-analysis_${channelData.channel.title?.replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
       downloadCSV(csvContent, filename);
     } catch (err) {
-      setError('Failed to download CSV');
+      setError('CSVのダウンロードに失敗しました');
     } finally {
       setLoading(false);
     }
@@ -122,11 +122,11 @@ const ChannelAnalysis = () => {
     const secs = seconds % 60
     
     const parts = []
-    if (hours > 0) parts.push(`${hours}h`)
-    if (minutes > 0) parts.push(`${minutes}m`)
-    if (secs > 0) parts.push(`${secs}s`)
+    if (hours > 0) parts.push(`${hours}時間`)
+    if (minutes > 0) parts.push(`${minutes}分`)
+    if (secs > 0) parts.push(`${secs}秒`)
     
-    return parts.join(' ') || '0s'
+    return parts.join(' ') || '0秒'
   }
 
   return (
@@ -179,10 +179,10 @@ const ChannelAnalysis = () => {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">{channelData.channel.title}</h2>
-                <p className="text-gray-600">Channel ID: {channelData.channel.id}</p>
+                <p className="text-gray-600">チャンネルID: {channelData.channel.id}</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  Created: {new Date(channelData.channel.publishedAt).toLocaleDateString()} • 
-                  Country: {channelData.channel.country}
+                  作成日: {new Date(channelData.channel.publishedAt).toLocaleDateString()} • 
+                  国: {channelData.channel.country}
                 </p>
               </div>
               <button
@@ -202,7 +202,7 @@ const ChannelAnalysis = () => {
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.subscriberCount)}</h3>
-                <p className="text-sm text-gray-600">Subscribers</p>
+                <p className="text-sm text-gray-600">登録者数</p>
               </div>
 
               <div className="text-center">
@@ -210,7 +210,7 @@ const ChannelAnalysis = () => {
                   <Eye className="h-6 w-6 text-green-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">{formatNumber(channelData.videoMetrics.avgViews)}</h3>
-                <p className="text-sm text-gray-600">Avg Views</p>
+                <p className="text-sm text-gray-600">平均視聴回数</p>
               </div>
 
               <div className="text-center">
@@ -218,7 +218,7 @@ const ChannelAnalysis = () => {
                   <Clock className="h-6 w-6 text-purple-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.totalVideoCount)}</h3>
-                <p className="text-sm text-gray-600">Total Videos</p>
+                <p className="text-sm text-gray-600">総動画数</p>
               </div>
 
               <div className="text-center">
@@ -226,7 +226,7 @@ const ChannelAnalysis = () => {
                   <BarChart3 className="h-6 w-6 text-orange-600" />
                 </div>
                 <h3 className="font-semibold text-gray-900">{formatNumber(channelData.statistics.totalViewCount)}</h3>
-                <p className="text-sm text-gray-600">Total Views</p>
+                <p className="text-sm text-gray-600">総視聴回数</p>
               </div>
             </div>
 
@@ -234,15 +234,15 @@ const ChannelAnalysis = () => {
             <div className="grid md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg">
               <div className="text-center">
                 <h4 className="font-semibold text-gray-900">{channelData.performanceMetrics.engagementRate}%</h4>
-                <p className="text-sm text-gray-600">Engagement Rate</p>
+                <p className="text-sm text-gray-600">エンゲージメント率</p>
               </div>
               <div className="text-center">
                 <h4 className="font-semibold text-gray-900">{channelData.performanceMetrics.likesToViewsRatio}%</h4>
-                <p className="text-sm text-gray-600">Like Rate</p>
+                <p className="text-sm text-gray-600">いいね率</p>
               </div>
               <div className="text-center">
                 <h4 className="font-semibold text-gray-900">{channelData.videoMetrics.avgDuration.formatted}</h4>
-                <p className="text-sm text-gray-600">Avg Duration</p>
+                <p className="text-sm text-gray-600">平均再生時間</p>
               </div>
             </div>
           </div>
@@ -252,7 +252,7 @@ const ChannelAnalysis = () => {
             <div className="card">
               <div className="flex items-center space-x-2 mb-4">
                 <Star className="h-5 w-5 text-yellow-600" />
-                <h3 className="text-lg font-semibold text-gray-900">Top 10 Most Viewed Videos</h3>
+                <h3 className="text-lg font-semibold text-gray-900">最も視聴された動画トップ10</h3>
               </div>
               <div className="space-y-3">
                 {channelData.topPerformingVideos.top10MostViewed.map((video, index) => (
@@ -262,7 +262,7 @@ const ChannelAnalysis = () => {
                       <div>
                         <h4 className="font-medium text-gray-900">{video.title}</h4>
                         <p className="text-sm text-gray-600">
-                          {formatNumber(video.viewCount)} views • {formatDuration(video.duration)} • {video.viewsAboveAverage} avg • {new Date(video.publishedAt).toLocaleDateString()}
+                          {formatNumber(video.viewCount)} 回視聴 • {formatDuration(video.duration)} • {video.viewsAboveAverage} 平均 • {new Date(video.publishedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -272,7 +272,7 @@ const ChannelAnalysis = () => {
                       rel="noopener noreferrer"
                       className="text-primary-600 hover:text-primary-700 text-sm"
                     >
-                      Watch
+                      視聴
                     </a>
                   </div>
                 ))}
@@ -286,7 +286,7 @@ const ChannelAnalysis = () => {
               <div className="flex items-center space-x-2 mb-4">
                 <AlertTriangle className="h-5 w-5 text-orange-600" />
                 <h3 className="text-lg font-semibold text-gray-900">
-                  Viral Videos ({channelData.topPerformingVideos.viralVideos.count})
+                  バイラル動画 ({channelData.topPerformingVideos.viralVideos.count})
                 </h3>
                 <span className="text-sm text-gray-500">
                   ({channelData.topPerformingVideos.viralVideos.threshold})
@@ -299,7 +299,7 @@ const ChannelAnalysis = () => {
                       <div>
                         <h4 className="font-medium text-gray-900">{video.title}</h4>
                         <p className="text-sm text-gray-600">
-                          {formatNumber(video.viewCount)} views • {video.viewsAboveAverage} average • {new Date(video.publishedAt).toLocaleDateString()}
+                          {formatNumber(video.viewCount)} 回視聴 • {video.viewsAboveAverage} 平均 • {new Date(video.publishedAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -309,7 +309,7 @@ const ChannelAnalysis = () => {
                       rel="noopener noreferrer"
                       className="text-primary-600 hover:text-primary-700 text-sm"
                     >
-                      Watch
+                      視聴
                     </a>
                   </div>
                 ))}
@@ -321,7 +321,7 @@ const ChannelAnalysis = () => {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Duration Distribution */}
             <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Duration Distribution</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">再生時間分布</h3>
               <div className="space-y-2">
                 {Object.entries(channelData.contentAnalysis.durationDistribution).map(([range, count]) => (
                   <div key={range} className="flex justify-between items-center">
@@ -334,18 +334,18 @@ const ChannelAnalysis = () => {
 
             {/* Upload Analysis */}
             <div className="card">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Insights</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">アップロード分析</h3>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Videos Analyzed</span>
+                  <span className="text-sm text-gray-600">分析された動画数</span>
                   <span className="font-medium">{channelData.statistics.analyzedVideoCount}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Avg Days Between Uploads</span>
+                  <span className="text-sm text-gray-600">平均アップロード間隔（日）</span>
                   <span className="font-medium">{channelData.contentAnalysis.videoFrequency.avgDaysBetweenUploads}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Analysis Period</span>
+                  <span className="text-sm text-gray-600">分析期間</span>
                   <span className="font-medium capitalize">{channelData.analysisMetadata.analyzedPeriod}</span>
                 </div>
               </div>
@@ -357,7 +357,7 @@ const ChannelAnalysis = () => {
             <div className="card">
               <div className="flex items-center space-x-2 mb-4">
                 <TrendingUp className="h-5 w-5 text-green-600" />
-                <h3 className="text-lg font-semibold text-gray-900">Most Used Tags</h3>
+                <h3 className="text-lg font-semibold text-gray-900">最も使用されたタグ</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {channelData.contentAnalysis.topTags.slice(0, 20).map(({ tag, count }) => (
@@ -376,18 +376,18 @@ const ChannelAnalysis = () => {
 
           {/* Analysis Metadata */}
           <div className="card bg-gray-50">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Analysis Summary</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-3">分析サマリー</h3>
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Analyzed at:</span>
+                <span className="text-gray-600">分析日時:</span>
                 <p className="font-medium">{new Date(channelData.analysisMetadata.analyzedAt).toLocaleString()}</p>
               </div>
               <div>
-                <span className="text-gray-600">Videos processed:</span>
+                <span className="text-gray-600">処理された動画数:</span>
                 <p className="font-medium">{channelData.analysisMetadata.totalVideosAnalyzed}</p>
               </div>
               <div>
-                <span className="text-gray-600">API calls used:</span>
+                <span className="text-gray-600">使用されたAPI呼び出し数:</span>
                 <p className="font-medium">{channelData.analysisMetadata.apiCallsUsed}</p>
               </div>
             </div>

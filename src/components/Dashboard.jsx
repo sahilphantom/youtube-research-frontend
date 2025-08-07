@@ -92,13 +92,13 @@ useEffect(() => {
               </h2>
             </div>
             <p className="text-gray-600 mb-6 leading-relaxed">
-              YouTubeチャンネルとそのパフォーマンスを調査・分析します。
+              YouTubeチャンネルとそのパフォーマンスを分析します。
             </p>
             <Link
               to="/channel-analysis"
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-xl hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
-              チャンネル調査
+              チャンネルを分析
               <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
