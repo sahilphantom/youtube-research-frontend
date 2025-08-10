@@ -491,7 +491,7 @@ const VideoAnalysis = () => {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="min-w-full">
+                <table className="min-w-[95vw]">
                   <thead>
                     <tr className="border-b">
                       <th className="text-left py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>動画タイトル</th>
