@@ -23,6 +23,8 @@ import FAQ from './components/FAQ'
 import HowToUse from './components/HowToUse'
 import Tools from './components/Tools'
 import { Contact } from './components/Contact'
+import Blog from './components/Blog'
+import BlogPost from './components/BlogPost'
 
 function App() {
   const { pathname } = useLocation();
@@ -47,6 +49,8 @@ function App() {
             <Route path="/howtouse" element={<HowToUse />} />
             <Route path="/tools" element={<Tools />} />
             <Route path='/contact' element={<Contact />} />
+            <Route path="/blog" element={<Blog/>} />
+            <Route path="/blog/:id" element={<BlogPost /> } />
             {/* Error routes */}
             <Route path="/unauthorized" element={<Unauthorized />} />
 

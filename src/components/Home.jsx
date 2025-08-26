@@ -7,6 +7,7 @@ import FAQ from './FAQ';
 import HowToUse from './HowToUse';
 import Tools from './Tools';
 import { Contact } from './Contact';
+import Blog from './Blog';
 
 // Link component - adjust based on your routing solution
 const Link = ({ href, children, className, ...props }) => (
@@ -44,7 +45,9 @@ export default function Home() {
       
      
       <HowToUse />
+
       <Tools />
+      <Blog />
       <FAQ />
 
       {/* Content Section */}

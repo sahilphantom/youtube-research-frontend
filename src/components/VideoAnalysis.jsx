@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Youtube, Download, Eye, ThumbsUp, Calendar, Clock, FileText, MessageCircle, TrendingUp, BarChart3, Plus, X, ArrowUp, ArrowDown } from 'lucide-react';
+import { Youtube, Download, Eye, ThumbsUp, Calendar, Clock, FileText, MessageCircle, TrendingUp, BarChart3, Plus, X, ArrowUp, ArrowDown, Star } from 'lucide-react';
 import api from '../services/api';
 import { downloadCSV } from '../utils/helpers';
 
@@ -26,6 +26,7 @@ const VideoAnalysis = () => {
     try {
       const response = await api.post('/videos/info', { videoUrl: url });
       setVideoData(response.data.video); // Extract video object from response
+     
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch video information');
     } finally {
@@ -48,6 +49,7 @@ const VideoAnalysis = () => {
     try {
       const response = await api.post('/videos/compare', { videoUrls: validUrls });
       setComparisonData(response.data.videos);
+      
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to compare videos');
     } finally {
@@ -90,7 +92,8 @@ const VideoAnalysis = () => {
           performanceCategory: video.metrics?.performanceCategory,
           genre: video.genre,
           uploadDate: new Date(video.publishedAt).toLocaleDateString(),
-          duration: formatDuration(video.duration)
+          duration: formatDuration(video.duration),
+          rating: video.rating || 'N/A'
         }));
         
         const headers = Object.keys(csvRows[0]).join(',');
@@ -123,7 +126,8 @@ const VideoAnalysis = () => {
           genre: data.genre,
           uploadDate: new Date(data.publishedAt).toLocaleDateString(),
           duration: formatDuration(data.duration),
-          description: data.description
+          description: data.description,
+          rating: data.rating 
         };
         
         const headers = Object.keys(csvData).join(',');
@@ -309,6 +313,13 @@ const VideoAnalysis = () => {
                       <Clock className="h-5 w-5 text-orange-600" />
                       <span className="font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>{formatDuration(videoData.duration)}</span>
                     </div>
+
+                    {videoData.rating && (
+                      <div className="flex items-center space-x-3">
+                        <Star className="h-5 w-5 text-yellow-600" />
+                        <span className="font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>評価: {videoData.rating}</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Engagement Metrics */}
@@ -490,58 +501,292 @@ const VideoAnalysis = () => {
                 </button>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="min-w-[95vw]">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>動画タイトル</th>
-                      <th className="text-right py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>視聴回数</th>
-                      <th className="text-right py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>いいね率</th>
-                      <th className="text-right py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>コメント率</th>
-                      <th className="text-right py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>時間あたり視聴回数</th>
-                      <th className="text-center py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>パフォーマンス</th>
-                      <th className="text-center py-3 px-4 font-medium text-gray-900" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>ジャンル</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comparisonData.map((video, index) => (
-                      <tr key={video.id} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                        <td className="py-3 px-4">
-                          <div className="max-w-xs">
-                            <div className="font-medium text-gray-900 truncate" title={video.title} style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                              {video.title}
-                            </div>
-                            <div className="text-sm text-gray-500" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>{video.channelTitle}</div>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                          {formatNumber(video.viewCount)}
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                          {video.metrics?.likeRatio}%
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                          {video.metrics?.commentRatio}%
-                        </td>
-                        <td className="py-3 px-4 text-right font-medium" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                          {formatNumber(video.metrics?.viewsPerHour)}
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <PerformanceBadge category={video.metrics?.performanceCategory} />
-                        </td>
-                        <td className="py-3 px-4 text-center">
-                          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs" style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
-                            {video.genre}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <div className="w-full">
+  {/* Mobile Card View - Below md (768px) */}
+  <div className="block md:hidden">
+    {comparisonData.map((video, index) => (
+      <div key={video.id} className="bg-white border rounded-lg mb-3 p-3 shadow-sm">
+        {/* Title and Channel */}
+        <div className="mb-3">
+          <h3 className="font-medium text-sm text-gray-900 line-clamp-2 mb-1" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            {video.title}
+          </h3>
+          <p className="text-xs text-gray-500 truncate" 
+             style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            {video.channelTitle}
+          </p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          <div className="flex justify-between">
+            <span className="text-gray-600">視聴回数:</span>
+            <span className="font-medium">{formatNumber(video.viewCount)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">いいね:</span>
+            <span className="font-medium">{formatNumber(video.likeCount)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">いいね率:</span>
+            <span className="font-medium">{video.metrics?.likeRatio || 0}%</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">コメント:</span>
+            <span className="font-medium">{formatNumber(video.commentCount)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">コメント率:</span>
+            <span className="font-medium">{video.metrics?.commentRatio || 0}%</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">動画長:</span>
+            <span className="font-medium">{formatDuration(video.duration)}</span>
+          </div>
+        </div>
+
+        {/* Performance and Genre */}
+        <div className="flex justify-between items-center mt-3 pt-2 border-t">
+          <PerformanceBadge category={video.metrics?.performanceCategory} />
+          <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            {video.genre}
+          </span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Tablet Table View - md to lg (768px to 1024px) */}
+  <div className="hidden md:block lg:hidden overflow-x-auto">
+    <table className="w-full table-auto min-w-[700px]">
+      <thead>
+        <tr className="border-b bg-gray-100">
+          <th className="text-left py-2 px-2 font-medium text-gray-900 w-[35%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">動画タイトル</span>
+          </th>
+          <th className="text-right py-2 px-1 font-medium text-gray-900 w-[10%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">視聴回数</span>
+          </th>
+          <th className="text-right py-2 px-1 font-medium text-gray-900 w-[8%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">いいね</span>
+          </th>
+          <th className="text-right py-2 px-1 font-medium text-gray-900 w-[8%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">コメント</span>
+          </th>
+          <th className="text-right py-2 px-1 font-medium text-gray-900 w-[8%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">動画長</span>
+          </th>
+          <th className="text-center py-2 px-1 font-medium text-gray-900 w-[12%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">パフォーマンス</span>
+          </th>
+          <th className="text-center py-2 px-1 font-medium text-gray-900 w-[10%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-sm">ジャンル</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {comparisonData.map((video, index) => (
+          <tr key={video.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}>
+            {/* Title Column */}
+            <td className="py-2 px-2">
+              <div className="min-w-0">
+                <div className="font-medium text-gray-900 text-sm leading-tight line-clamp-2" 
+                     style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                  {video.title}
+                </div>
+                <div className="text-xs text-gray-500 mt-1 truncate" 
+                     style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                  {video.channelTitle}
+                </div>
               </div>
+            </td>
+
+            {/* View Count */}
+            <td className="py-2 px-1 text-right font-medium text-sm whitespace-nowrap">
+              <div>{formatNumber(video.viewCount)}</div>
+              <div className="text-xs text-gray-500">{video.metrics?.likeRatio || 0}%</div>
+            </td>
+
+            {/* Like Count + Rate */}
+            <td className="py-2 px-1 text-right font-medium text-sm whitespace-nowrap">
+              <div>{formatNumber(video.likeCount)}</div>
+              <div className="text-xs text-gray-500">{video.metrics?.likeRatio || 0}%</div>
+            </td>
+
+            {/* Comment Count + Rate */}
+            <td className="py-2 px-1 text-right font-medium text-sm whitespace-nowrap">
+              <div>{formatNumber(video.commentCount)}</div>
+              <div className="text-xs text-gray-500">{video.metrics?.commentRatio || 0}%</div>
+            </td>
+
+            {/* Video Duration */}
+            <td className="py-2 px-1 text-right font-medium text-sm whitespace-nowrap">
+              {formatDuration(video.duration)}
+            </td>
+
+            {/* Performance Badge */}
+            <td className="py-2 px-1 text-center">
+              <PerformanceBadge category={video.metrics?.performanceCategory} />
+            </td>
+
+            {/* Genre */}
+            <td className="py-2 px-1 text-center">
+              <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs whitespace-nowrap" 
+                    style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                {video.genre}
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {/* Desktop Table View - lg and above (1024px+) */}
+  <div className="hidden lg:block">
+    <table className="w-full table-auto">
+      <thead>
+        <tr className="border-b bg-gray-100">
+          <th className="text-left py-2 px-1 sm:py-3 sm:px-2 md:px-3 lg:px-4 font-medium text-gray-900 w-[30%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">動画タイトル</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[8%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">視聴回数</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[7%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">いいね数</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[7%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">いいね率</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[8%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">コメント数</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[7%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">コメント率</span>
+          </th>
+          <th className="text-right py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[7%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">動画長</span>
+          </th>
+          <th className="text-center py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[9%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">パフォーマンス</span>
+          </th>
+          <th className="text-center py-2 px-1 sm:py-3 sm:px-2 md:px-3 font-medium text-gray-900 w-[10%]" 
+              style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+            <span className="text-xs sm:text-sm md:text-base">ジャンル</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {comparisonData.map((video, index) => (
+          <tr key={video.id} className={`${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100 transition-colors`}>
+            {/* Title Column */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 lg:px-4">
+              <div className="min-w-0">
+                <div className="font-medium text-gray-900 text-xs sm:text-sm md:text-base leading-tight" 
+                     style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                  <div className="line-clamp-1">
+                    {video.title}
+                  </div>
+                </div>
+                <div className="text-xs sm:text-sm text-gray-500 mt-1 truncate" 
+                     style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                  {video.channelTitle}
+                </div>
+              </div>
+            </td>
+
+            {/* View Count */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {formatNumber(video.viewCount)}
+            </td>
+
+            {/* Like Count */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {formatNumber(video.likeCount)}
+            </td>
+
+            {/* Like Ratio */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {video.metrics?.likeRatio || 0}%
+            </td>
+
+            {/* Comment Count */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {formatNumber(video.commentCount)}
+            </td>
+
+            {/* Comment Ratio */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {video.metrics?.commentRatio || 0}%
+            </td>
+
+            {/* Video Duration */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-right font-medium text-xs sm:text-sm md:text-base whitespace-nowrap" 
+                style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+              {formatDuration(video.duration)}
+            </td>
+
+            {/* Performance Badge */}
+            <td className="py-2 px-1 flex text-xs sm:py-3 sm:px-2 md:px-3 text-center">
+              <PerformanceBadge category={video.metrics?.performanceCategory} />
+            </td>
+
+            {/* Genre */}
+            <td className="py-2 px-1 sm:py-3 sm:px-2 md:px-3 text-center">
+              <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs sm:text-sm whitespace-nowrap" 
+                    style={{ fontFamily: 'Noto Sans JP, Hiragino Kaku Gothic ProN, Hiragino Sans, Yu Gothic, Meiryo, Takao, sans-serif' }}>
+                {video.genre}
+              </span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+              {/* Custom CSS for line-clamp if not available in your Tailwind setup */}
+              <style jsx>{`
+                .line-clamp-1 {
+                  display: -webkit-box;
+                  -webkit-line-clamp: 1;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
+                .line-clamp-2 {
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
+              `}</style>
             </div>
           )}
-      
+        </>
+      )}
 
       {/* Error Message */}
       {error && (
@@ -549,13 +794,8 @@ const VideoAnalysis = () => {
           {error}
         </div>
       )}
-        </>
-      )}  
-
-     
-  
     </div>
-  ) 
-}
+  );
+};
 
-export default VideoAnalysis
+export default VideoAnalysis;
