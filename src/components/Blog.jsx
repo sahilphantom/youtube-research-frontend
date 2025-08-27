@@ -9,7 +9,6 @@ const Blog = () => {
       title: "YouTubeで伸びる動画を見極める！競合リサーチのコツ",
       description: "YouTubeで伸びる動画の見つけ方をやさしく解説。VizzTubeを使った数字に基づく競合分析で、どんな動画を作ればいいかが分かります。",
       image: "/src/assets/blog.png",
-      // content property removed as it's not needed in the grid view
     },
     {
       id: 2,
